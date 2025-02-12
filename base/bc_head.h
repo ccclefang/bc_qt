@@ -1,6 +1,7 @@
-﻿#ifndef C_HEAD_H
-#define C_HEAD_H
+﻿#ifndef BC_HEAD_H
+#define BC_HEAD_H
 
+#include "bc_base.h"
 
 #include <QtWidgets/QMainWindow>
 #include <QApplication>

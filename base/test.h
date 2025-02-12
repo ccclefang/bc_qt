@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <QtWidgets/QMainWindow>
+#include "bc_global.h"
 
 class base : public QMainWindow
 {

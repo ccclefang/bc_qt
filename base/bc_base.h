@@ -71,7 +71,6 @@ inline void cccout(Arg const & ...args)
 // @ func:
 // @ para:
 // ***************************************************
-
 // 单例初始化基类
 class SingletonInitBase
 {
@@ -126,6 +125,19 @@ T* SingletonInit<T>::ptr()
 
 
 
+// 全局初始化                                                     
+#define SINGLETON(ClassName)                                     \
+public:                                                          \
+    static ClassName* ptr() {                                    \
+        static ClassName instance;                               \
+        return &instance;                                        \
+    }                                                            \
+private:                                                         \
+    ClassName() {}                                               \
+    ClassName(const ClassName&) = delete;                        \
+    ClassName& operator=(const ClassName&) = delete;             \
+
+
 // 全局初始化
 #define SINGLETON_INIT(Name)                                     \
     private:                                                     \
@@ -135,6 +147,7 @@ T* SingletonInit<T>::ptr()
 	    cccout(str);                                             \
         m_obj.Init();                                            \
     }                                                            
+
 
 // 顺序初始化                                                     
 #define SINGLETON_INIT_IDX(Name, i)                              \

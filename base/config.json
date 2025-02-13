@@ -1,0 +1,12 @@
+﻿{
+  "color": {
+    "maincolor": "#0033d4",
+    "confirmcolor": "#0033d4",
+    "lightcolor": "#6284f0",
+
+    "backcolor": "#10237c",
+    "fontcolor": "#0078d4",
+    "disablecolor": "#0056a0"
+  }
+ 
+}

@@ -1,8 +1,11 @@
 ﻿#pragma once
 
-#include "bc_global.h"
+#include "page_set.h"
 
-class base : public QMainWindow
+
+
+
+class base : public QWidget
 {
     Q_OBJECT
 

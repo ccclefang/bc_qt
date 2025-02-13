@@ -1,0 +1,22 @@
+﻿QWidget 
+{
+	background: transparent;
+	border:0px solid #cdcdcd;
+}
+
+QWidget#BcBordeWidget 
+{
+        border:1px solid #cdcdcd;
+}
+
+QLabel
+{
+	background: transparent;
+	color:@FontColor;
+}
+
+QLabel:disabled
+{
+	background: transparent;
+	color:@UnableColor;
+}

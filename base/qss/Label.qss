@@ -1,0 +1,40 @@
+﻿QLabel
+{
+	background-color: transparent;
+	color: @FontColor;
+	padding: 0 0 0 0;
+	border:0px solid red;
+}
+
+QLabel#headrect
+{
+	background-color: @MainColor;
+	color: @FontColor;
+}
+
+QLabel#loadrect
+{
+	background-color: @MainColor;
+	color: white;
+}
+
+QLabel#dateedit
+{
+	border-image:url(:/widget/Resources/widget/dateedit.png);
+}
+
+QLabel#dateedit:disabled
+{
+	border-image:url(:/widget/Resources/widget/dateedit2.png);
+}
+
+
+QLabel#Bottom
+{
+	background: @MainColor;
+	color:white;
+	padding:20;
+	border-bottom-right-radius:5px;
+	border-bottom-left-radius:5px;
+	border:0px solid @MainColor;
+}

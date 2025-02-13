@@ -1,0 +1,70 @@
+﻿QSpinBox, QDoubleSpinBox
+{
+	background-color:transparent;
+	color:@FontColor;
+	margin: 0 0 0 0;
+	border:0px solid red;
+	qproperty-alignment:AlignHCenter;
+	min-width: @spintextwidth;
+}
+
+QSpinBox:disabled, QDoubleSpinBox:disabled
+{
+	color:@UnableColor;
+}
+
+QSpinBox::up-button, QDoubleSpinBox::up-button, 
+QSpinBox::down-button, QDoubleSpinBox::down-button
+{
+        border-radius:3px;
+        width: 8ex;                                                    /*设置该按钮的宽高*/
+        height: 8ex;
+}
+
+QSpinBox::up-button,QDoubleSpinBox::up-button
+{
+        subcontrol-origin:margin;
+        subcontrol-position:left;
+        image: url(:/widget/Resources/widget/spinup.svg);
+        width: @widthpx;                                                         /*设置该图标的宽高*/
+        height: @heightpx;
+}
+
+QSpinBox::down-button,QDoubleSpinBox::down-button
+{
+        subcontrol-origin:margin;
+        subcontrol-position:right;
+        image:url(:/widget/Resources/widget/spindown.svg);
+        width: @widthpx;                                                         /*设置该图标的宽高*/
+        height: @heightpx;
+}
+
+QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover, 
+QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover
+{
+	background-color:@LightColor;
+}
+
+QSpinBox::up-button:pressed, QDoubleSpinBox::up-button:pressed,
+QSpinBox::down-button:pressed, QDoubleSpinBox::down-button:pressed
+{
+	background-color:@MainColor;
+}
+
+QDoubleSpinBox#Suffix::up-button, 
+QDoubleSpinBox#Suffix::down-button
+{
+	width: 0;
+	height: 0;
+}
+
+
+
+
+
+
+
+QSpinBox#Page::up-button,QSpinBox#Page::down-button
+{
+    width:0px;
+}

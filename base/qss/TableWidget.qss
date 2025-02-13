@@ -1,0 +1,11 @@
+﻿QTableWidget
+{
+	border:1px solid @MainColor;
+	border-top-right-radius:5px;
+	border-top-left-radius:5px;
+	selection-color: white;
+	background-color: @BackColor;
+	selection-background-color: @LightColor;
+	alternate-background-color: @BackColor;
+};
+

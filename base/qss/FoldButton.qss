@@ -1,0 +1,15 @@
+﻿QPushButton
+{
+	background:transparent;
+	border-image:url(:/right/Resources/right/fold_release.svg);
+}
+
+QPushButton:pressed
+{
+	border-image:url(:/right/Resources/right/fold_pressed.svg);
+}
+
+QPushButton:checked
+{
+	border-image:url(:/right/Resources/right/fold_checked.svg);
+}

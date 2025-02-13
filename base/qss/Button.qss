@@ -1,0 +1,37 @@
+﻿/****************** 按钮 ***********************/
+QPushButton {
+    color: @fontcolor;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid @maincolor;
+    padding: @padding @padding @padding @padding;
+}
+
+
+QPushButton:focus {
+    outline: none;
+}
+
+QPushButton:hover {
+    color: @backcolor;
+    border: 1px solid @lightcolor;
+    background-color: @lightcolor;
+}
+
+QPushButton:pressed {
+    color: white;
+    background-color: @maincolor;
+    border: 2px solid white;
+}
+
+QPushButton:released {
+    color: white;
+    background-color: @maincolor;
+}
+
+QPushButton:disabled {
+    color: white;
+    background: @disablecolor;
+    border: 1px solid @disablecolor;
+}
+

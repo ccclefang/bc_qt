@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="base">
+    <qresource prefix="/base">
+        <file>qss/Button.qss</file>
     </qresource>
 </RCC>

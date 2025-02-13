@@ -1,0 +1,23 @@
+﻿QCheckBox
+{
+	color:@FontColor;
+	text-align:center;
+	padding: 1 1 1 1;
+	border:0px solid red;
+}
+
+QCheckBox::indicator:checked
+{
+    /*image: url(:/Resources/image/checkbox_checked.png);*/
+}
+
+QCheckBox::indicator:unchecked
+{
+    /*image: url(:/Resources/image/checkbox_unchecked.png);*/
+}
+
+QCheckBox:disabled
+{
+	background: transparent;
+	color:@UnableColor;
+}

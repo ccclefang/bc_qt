@@ -104,15 +104,32 @@
   <ItemGroup>
     <QtRcc Include="base.qrc" />
     <QtMoc Include="test.h" />
+    <ClCompile Include="bc_widget.cpp" />
     <ClCompile Include="bc_base.cpp" />
+    <ClCompile Include="page_board.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
+    <ClCompile Include="page_main.cpp" />
+    <ClCompile Include="page_set.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="bc_global.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="page_board.h" />
+    <ClInclude Include="page_main.h" />
+    <QtMoc Include="page_set.h" />
+    <QtMoc Include="bc_widget.h" />
     <ClInclude Include="bc_base.h" />
-    <ClInclude Include="bc_global.h" />
+    <QtMoc Include="bc_global.h" />
     <ClInclude Include="bc_head.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
+    <None Include="qss\Button.qss" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

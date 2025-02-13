@@ -1,0 +1,12 @@
+﻿QLineEdit
+{
+	background-color:transparent;
+	color:@FontColor;
+	padding: 0 0 0 0;
+        border:0px solid red;
+}
+
+QLineEdit:disabled
+{
+	color:@UnableColor;
+}

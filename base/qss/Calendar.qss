@@ -1,0 +1,125 @@
+﻿
+/* 主体 */
+#qt_calendar_calendarview 
+{
+    background: white;
+	border:0px solid @MainColor;
+}
+
+/* 导航 */
+#qt_calendar_navigationbar
+{
+    background: @MainColor;
+	border:1px solid @MainColor;
+}
+
+
+QToolButton
+{
+    background: @MainColor;
+    icon-size: 0px, 0px;
+}
+
+QToolButton#qt_calendar_prevmonth 
+{
+	width:30px;
+	height:30px;
+	margin:5 10 5 10;
+    image: url(:/widget/Resources/widget/chevron-down.svg);
+}
+
+QToolButton#qt_calendar_nextmonth 
+{
+	width:30px;
+	height:30px;
+	margin:5 10 5 10;
+    image: url(:/widget/Resources/widget/chevron-up.svg);
+}
+
+QToolButton#qt_calendar_prevmonth:hover
+{
+	background-color:@LightColor;
+}
+
+QToolButton#qt_calendar_nextmonth:hover 
+{
+	background-color:@LightColor;
+}
+
+
+/* 月份下拉 */
+QToolButton#qt_calendar_monthbutton 
+{
+    background: transparent;
+    padding-right: 20px;
+}
+
+QToolButton#qt_calendar_monthbutton::menu-indicator
+{
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 3px;
+    width: 10px;
+}
+
+QMenu
+{
+	color:red;
+	background-color:white;
+	border:1px solid @MainColor;
+}
+QMenu::item
+{
+	color:@FontColor;
+	background-color:white;
+	padding:10 10 10 10;
+}
+QMenu::item:selected
+{
+	color:white;
+	background-color: @MainColor;
+}
+
+
+/* 年份spinbox */
+QToolButton#qt_calendar_yearbutton 
+{
+    background: transparent;
+}
+
+QAbstractSpinBox::up-button
+{
+    width: 15px;        /* 设置宽度 */
+    height: 15px;       /* 设置高度 */
+    border: none;       /* 去除边框 */
+    background-image: url(:/widget/Resources/widget/chevron-up.svg);
+    background-position: center;
+}
+QAbstractSpinBox::down-button
+{
+    width: 15px;        /* 设置宽度 */
+    height: 15px;       /* 设置高度 */
+    border: none;       /* 去除边框 */
+    background-image: url(:/widget/Resources/widget/chevron-down.svg);
+    background-position: center;
+}
+
+QAbstractItemView 
+{
+    color: @LightColor;
+    selection-color: white;
+    selection-background-color: @MainColor;
+}
+
+QCalendarWidget QAbstractItemView:enabled 
+{
+    color: @FontColor;
+    selection-color: white;
+    selection-background-color: @MainColor;
+}
+
+/* 头部背景 */
+QCalendarWidget QWidget
+{
+	alternate-background-color: @BackColor; 
+}

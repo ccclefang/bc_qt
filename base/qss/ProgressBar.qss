@@ -1,0 +1,28 @@
+﻿QProgressBar{
+	border-radius:4px;
+	border:0px solid #4d65ff;
+	background-color:#4c60D8;
+}
+
+QProgressBar:chunk{
+	border-radius:4px;
+	border:2px solid #4d65ff;
+	background-color:#ffc84d;
+}
+
+
+
+
+QProgressBar#Check
+{
+	border:0px solid @LightColor;
+	background-color:@LightColor;
+	border-radius:@radius;
+}
+
+QProgressBar#Check:chunk
+{
+	border:2px solid @DeepColor;
+	background-color:@MainColor;
+	border-radius:@radius;
+}

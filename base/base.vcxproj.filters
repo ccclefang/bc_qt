@@ -21,6 +21,18 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Header Files\page">
+      <UniqueIdentifier>{a813c79b-c053-412a-a1de-11c670d55da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\page">
+      <UniqueIdentifier>{a05926ea-d532-457f-a164-666ac8985393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\base">
+      <UniqueIdentifier>{e49c4cc6-1d3c-4074-bc9f-dc48ab829ff7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\base">
+      <UniqueIdentifier>{621a7c58-8388-4c7a-89c8-b73e309785d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="base.qrc">
@@ -37,22 +49,56 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bc_global.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="page_set.cpp">
+      <Filter>Source Files\page</Filter>
+    </ClCompile>
+    <ClCompile Include="page_main.cpp">
+      <Filter>Source Files\page</Filter>
+    </ClCompile>
+    <ClCompile Include="bc_widget.cpp">
+      <Filter>Source Files\base</Filter>
     </ClCompile>
     <ClCompile Include="bc_base.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="bc_global.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="page_board.cpp">
+      <Filter>Source Files\page</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bc_global.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="page_main.h">
+      <Filter>Header Files\page</Filter>
     </ClInclude>
     <ClInclude Include="bc_head.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\base</Filter>
     </ClInclude>
     <ClInclude Include="bc_base.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\base</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="qss\Button.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="page_set.h">
+      <Filter>Header Files\page</Filter>
+    </QtMoc>
+    <QtMoc Include="page_board.h">
+      <Filter>Header Files\page</Filter>
+    </QtMoc>
+    <QtMoc Include="bc_widget.h">
+      <Filter>Header Files\base</Filter>
+    </QtMoc>
+    <QtMoc Include="bc_global.h">
+      <Filter>Header Files\base</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

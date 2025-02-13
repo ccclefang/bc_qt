@@ -1,0 +1,134 @@
+﻿QScrollBar
+{
+	background-color:@BackColor;
+        border:1px solid @LightColor;
+        width: 25px;
+        padding-left: 2px;
+        padding-top: 35px;
+        padding-right: 2px;
+        padding-bottom: 35px;
+}
+
+QScrollBar#ScrollComboBox
+{
+        background-color: rgb(240, 240, 255);
+        border:0px solid @LightColor;
+        border-radius: 11px;
+        width: 25px;
+
+}
+
+QScrollBar#tree
+{
+	margin-right: 0;
+}
+
+QScrollBar#ScrollComboBox::add-line
+{
+        image:url(:/widget/Resources/widget/arrowdown.svg);
+        border: 1px solid @LightColor;
+        border-bottom-right-radius: 11px;
+}
+
+QScrollBar#ScrollComboBox::sub-line
+{
+        image:url(:/widget/Resources/widget/arrowup.svg);
+        border: 1px solid @LightColor;
+        border-top-right-radius: 11px;
+}
+
+QScrollBar::handle
+{
+	background-color: @LightColor;
+        border:1px solid @BackColor;
+        min-width: 18px;
+        min-height: 18px;
+}
+
+QScrollBar::sub-line, QScrollBar::add-line
+{
+        border:1px solid @LightColor;
+}
+
+QScrollBar::handle:hover
+{
+	background-color: @MainColor;
+}
+
+QScrollBar::handle:pressed
+{
+	background-color: @MainColor;
+}
+
+QScrollBar::add-line
+{
+	image:url(:/widget/Resources/widget/arrowdown.svg);
+}
+
+QScrollBar::sub-line
+{
+	image:url(:/widget/Resources/widget/arrowup.svg);
+}
+
+QScrollBar::add-line:hover, QScrollBar::sub-line:hover
+{
+	background-color:@LightColor;
+}
+
+QScrollBar::add-line:pressed, QScrollBar::sub-line:pressed
+{
+	background-color:@MainColor;
+}
+
+/* 水平滚动条 */
+QScrollBar::horizontal
+{
+    background-color:@BackColor;
+    border:1px solid @LightColor;
+    height:30px;
+    padding-top:2px;
+    padding-right:35px;
+    padding-bottom:2px;
+    padding-left:35px;
+}
+
+QScrollBar::handle:horizontal
+{
+    background-color: @LightColor;
+    border:1px solid @BackColor;
+}
+
+QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal
+{
+    border:1px solid @LightColor;
+}
+
+QScrollBar::handle:horizontal:hover
+{
+    background-color: @MainColor;
+}
+
+QScrollBar::handle:horizontal:pressed
+{
+    background-color: @MainColor;
+}
+
+QScrollBar::add-line:horizontal
+{
+    image:url(:/widget/Resources/widget/arrowright.svg);
+}
+
+QScrollBar::sub-line:horizontal
+{
+    image:url(:/widget/Resources/widget/arrowleft.svg);
+}
+
+QScrollBar::add-line:horizontal:hover, QScrollBar::sub-line:horizontal:hover
+{
+    background-color:@LightColor;
+}
+
+QScrollBar::add-line:horizontal:pressed, QScrollBar::sub-line:horizontal:pressed
+{
+    background-color:@MainColor;
+}

@@ -1,0 +1,29 @@
+﻿QDateEdit
+{
+	background-color:transparent;
+	color:@FontColor;
+        padding: 0 10 0 0;
+	border:0px solid red;
+}
+
+QDateEdit:disabled
+{
+	color:@UnableColor;
+}
+
+QDateEdit::drop-down 
+{
+	subcontrol-origin: padding;
+        subcontrol-position: center right;
+	right:0px;
+
+	width: @width;
+	height: @height;
+	background-color:transparent;
+	border-image:url(:/widget/Resources/widget/dateedit.png);
+}
+
+QDateEdit::drop-down:disabled
+{
+	border-image:url(:/widget/Resources/widget/dateedit2.png);
+}

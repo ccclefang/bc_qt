@@ -1,0 +1,54 @@
+﻿/* weight中的标题*/
+QLabel#Title
+{
+        background: @MainColor;
+        color:white;
+        padding-left:10;
+        border-top-right-radius:5px;
+        border-top-left-radius:5px;
+        border:0px solid @MainColor;
+}
+
+/* 对话框中的标题 */
+QLabel#Head
+{
+        background: @PressColor;
+        color:white;
+        padding-left:10;
+        border-top-right-radius:5px;
+        border-top-left-radius:5px;
+        border:0px solid @MainColor;
+}
+
+QWidget#ScrollArea
+{
+	background: @BackColor;
+        border:1px solid @MainColor;
+}
+
+QWidget#ScrollWidget
+{
+	background: transparent;
+	border:0px;
+}
+
+QWidget#TitleDialog
+{
+        background-color: @MainColor;
+        color: white;
+        padding: 0;
+        border:2px solid @MainColor;
+        border-top-right-radius:10px;
+        border-top-left-radius:10px;
+}
+
+/* 弹出对话框的标题 */
+QWidget#HeadDialog
+{
+        background-color: @PressColor;
+        color: white;
+        padding: 0;
+        border:2px solid @PressColor;
+        border-top-right-radius:10px;
+        border-top-left-radius:10px;
+}

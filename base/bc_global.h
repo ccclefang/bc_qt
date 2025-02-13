@@ -5,13 +5,44 @@
 
 
 
-// ******************  样式  *************************
+// ******************  配置  *************************
 // @
 // @
 // ***************************************************
-class BcStyle : SingletonInit<BcStyle>
+class BcJson : public SingletonInit<BcJson>
 {
-	SINGLETON_INIT_IDX(BcStyle, 1)
+	SINGLETON_INIT_IDX(BcJson, 0)
+
+public:
+	void Init();
+
+public:
+	// 颜色
+	QJsonObject getColor();
+	void modifyColor(QString color);
+
+
+	// 保存修改后的 JSON 数据到文件
+	bool saveJson() const;
+
+private:
+	QString filepath;
+
+	QJsonObject jsonObj;
+
+};
+
+
+
+
+
+// ******************  字体  *************************
+// @
+// @
+// ***************************************************
+class BcFont : public SingletonInit<BcFont>
+{
+	SINGLETON_INIT_IDX(BcFont, 1)
 public:
 	void Init();
 
@@ -22,13 +53,7 @@ public:
 	// 小号字体
 	inline static QFont titlefont;
 
-public:
-	QMap<QString, QColor> ColorMap;
 };
-
-
-
-
 
 
 
@@ -36,7 +61,7 @@ public:
 // @
 // @
 // ***************************************************
-class BcSize : SingletonInit<BcSize>
+class BcSize : public SingletonInit<BcSize>
 {
 	SINGLETON_INIT_IDX(BcSize, 2)
 
@@ -58,15 +83,82 @@ public:
 	inline static int PageMargin;
 	// 边界宽度：控件边界
 	inline static int ComMargin;
-
 };
 
 
 
 
 
+// ******************  样式  *************************
+// @
+// @
+// ***************************************************
+class BcStyle : public SingletonInit<BcStyle>
+{
+	SINGLETON_INIT_IDX(BcStyle, 3)
+public:
+	void Init();
+
+public:
+	// 获取QSS
+	static QString ReadQssFile(const QString filePath);
+
+	// 注册控件
+	static QString RegistQssStyle(const QString qssname, QWidget* widget);
+
+	// 样式刷新
+	static QString UpdateQssStyle();
+
+
+public:
+	// 颜色表
+	inline static QMap<QString, QColor> ColorMap;
+	inline static QColor maincolor;
+	inline static QColor confirmcolor;
+	inline static QColor lightcolor;
+	inline static QColor backcolor;
+	inline static QColor fontcolor;
+	inline static QColor disablecolor;
+
+
+
+	// 替换表
+	inline static QMap<QString, QString> StyleValueMap;
+
+	// 样式表
+	inline static QMap<QString, QString> StyleSheetMap;
+
+	
+private:
+	inline static QVector<QWidget*> objvec;
+};
+
+
+
+
+
+// ******************  信号槽  ************************
+// @
+// @
+// ***************************************************
+class BcSignalSlot :public QObject
+{
+	Q_OBJECT
+
+	SINGLETON(BcSignalSlot)
+
+public:
+
+
+signals:
+	// 通用设置
+	void updateSet();
+	void updateSetColor();
+	void updateSetFont();
+	void updateSetSize();
+
+};
 
 
 
 #endif
-

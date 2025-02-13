@@ -1,0 +1,8 @@
+﻿QLabel
+{
+	background: @MainColor;
+	color:white;
+	padding:1;
+	border-radius: @radius;
+	image:url(@svg);
+}

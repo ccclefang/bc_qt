@@ -1,0 +1,40 @@
+﻿QPushButton
+{
+	background-color:#6076FF;
+	color:#ffffff;
+	text-align:center;
+        padding: 10 10 10 10;
+        border: 0px solid white;
+
+}
+
+QPushButton:hover
+{
+	background-color:#4d65ff;
+	color:#ffffff;
+	border:0px;
+}
+
+QPushButton:pressed
+{
+	background-color:#2438B1;
+	color:#ffffff;
+	border:0px;
+}
+
+QPushButton:checked
+{
+	background-color:#2438B1;
+	color:#ffffff;
+	border:0px;
+}
+
+
+QPushButton:released
+{
+	background-color:#667bff;
+	color:#ffffff;
+	border:0px;
+}
+
+

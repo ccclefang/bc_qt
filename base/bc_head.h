@@ -3,6 +3,8 @@
 
 #include "bc_base.h"
 
+#pragma execution_character_set("utf-8")
+
 #include <QtWidgets/QMainWindow>
 #include <QApplication>
 #include <QDesktopWidget> 
@@ -76,6 +78,19 @@
 #include <QTextEdit> 
 #include <QCalendarWidget>
 #include <QSvgWidget>
+#include <QFontDialog>
+#include <QTranslator>
+#include <QColorDialog>
+
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+
+
+#include <QTableWidget>
+#include <QHeaderView>
+#include <QTableWidgetItem> 
+#include <QItemDelegate>
 
 #include <QPainter>
 #include <QPalette>
@@ -87,16 +102,10 @@
 #include <QPolygon>
 #include <QSvgRenderer>
 
-#include <QTableWidget>
-#include <QHeaderView>
-#include <QTableWidgetItem> 
-#include <QItemDelegate>
 
 
 #include <QSerialPort>
 #include <QSerialPortInfo>
-
-
 
 
 

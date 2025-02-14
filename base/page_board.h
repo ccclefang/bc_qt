@@ -12,6 +12,8 @@ class CustomTitleBar : public QWidget
 public:
     explicit CustomTitleBar(QWidget* parent = nullptr);
 
+    void changeMaxIcon(bool isMax);
+
 signals:
     void showMin();
     void showMax();
@@ -21,6 +23,11 @@ protected:
     void initLayout();
     void connectSignals();
     void updateWidget();
+
+private:
+    QPushButton* minButton;
+    QPushButton* maxButton;
+    QPushButton* closeButton;
 };
 
 
@@ -43,8 +50,6 @@ protected:
     void paintEvent(QPaintEvent* event) override;
 
 private:
-    int radius = 10;
-
     QColor color[2];
 };
 
@@ -65,8 +70,13 @@ protected:
     void connectSignals();
     void updateWidget();
 
+    void setWindowMaxMin();
+
+    bool event(QEvent* e);
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event);
+    //void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 
 private:
@@ -75,7 +85,25 @@ private:
     BackgroundWidget* m_page;
     CustomTitleBar*   m_title;
 
+    bool b_maxed = 0;
+    bool b_moved = 0;
+    QPoint m_lastpos, m_dragStart, m_frameStart, dragPosition;
+    QRect lastrect;
 
-    QPoint m_dragStart, m_frameStart;
+
+
+private:
+    QPoint lastPos;  // 上次鼠标位置
+    bool resizing;   // 是否正在缩放
+    enum ResizeMode { None, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight } resizeMode;  // 缩放模式
+    const int resizeMargin = 10;  // 定义缩放区域的大小
 };
+
+
+
+
+
+
+
+
 

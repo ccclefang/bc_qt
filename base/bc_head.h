@@ -109,5 +109,12 @@
 
 
 
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <windowsx.h>
+#endif
+
+
 #endif
 

@@ -67,6 +67,9 @@
     <ClCompile Include="page_board.cpp">
       <Filter>Source Files\page</Filter>
     </ClCompile>
+    <ClCompile Include="page_scaled.cpp">
+      <Filter>Source Files\page</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="page_main.h">
@@ -77,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="bc_base.h">
       <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="page_scaled.h">
+      <Filter>Header Files\page</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

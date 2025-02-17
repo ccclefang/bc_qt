@@ -2,7 +2,7 @@
 
 
 int _radius = 10; /// 窗口圆角
-int _margin = 30; // 阴影
+int _margin = 0; // 阴影
 
 
 
@@ -118,14 +118,17 @@ void BackgroundWidget::paintEvent(QPaintEvent* event)
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-	// 创建线性渐变
-	QLinearGradient gradient(0, height(), width(), 0);
-	gradient.setColorAt(0, color[0]);
-	gradient.setColorAt(1, color[1]);
+	//// 创建线性渐变
+	//QLinearGradient gradient(0, height(), width(), 0);
+	//gradient.setColorAt(0, color[0]);
+	//gradient.setColorAt(1, color[1]);
 
-	// 设置渐变色作为背景
-	painter.setBrush(gradient);
-	painter.setPen(Qt::NoPen); 
+	//// 设置渐变色作为背景
+	//painter.setBrush(gradient);
+	//painter.setPen(Qt::NoPen); 
+
+	painter.setBrush(Qt::white);
+	//painter.setPen(Qt::NoPen); 
 
 	// 绘制背景
 	painter.drawRoundedRect(rect(), _radius, _radius);
@@ -143,7 +146,7 @@ void BackgroundWidget::paintEvent(QPaintEvent* event)
 BoardWidget::BoardWidget(QWidget* parent)
 	:QWidget(parent)
 {
-	resize(600, 400);
+	resize(1000, 400);
 	
 	// 布局
 	initLayout();
@@ -161,7 +164,7 @@ void BoardWidget::initLayout()
 	setAttribute(Qt::WA_TranslucentBackground, true);
 
 	// 背景控件
-	BcHLayout* _layout = new BcHLayout(this);
+	BcHLayout* _layout = new BcHLayout(this, _margin);
 	m_page = new BackgroundWidget(this);
 	_layout->addWidget(m_page, 1);
 
@@ -201,6 +204,7 @@ void BoardWidget::connectSignals()
 		close();
 		});
 
+	connect(this, &BoardWidget::moveeee, this, &BoardWidget::movefun, Qt::QueuedConnection);
 }
 
 void BoardWidget::updateWidget()
@@ -221,8 +225,7 @@ void BoardWidget::setWindowMaxMin()
 		setContentsMargins(_margin, _margin, _margin, _margin);
 		m_title->changeMaxIcon(1);
 		setGeometry(lastrect);
-		//showNormal();
-
+		showNormal();
 	}
 	else
 	{
@@ -236,54 +239,35 @@ void BoardWidget::setWindowMaxMin()
 		lastrect = geometry();
 
 		move(0, 0);
-		//showMaximized();
-
 		resize(700, 500);
+		showMaximized();
 	}
 	
 }
 
-//
-//void BoardWidget::mousePressEvent(QMouseEvent* event)
-//{
-//	if (event->button() == Qt::LeftButton) 
-//	{
-//		b_moved = 1;
-//		dragPosition = event->globalPos() - frameGeometry().topLeft();
-//		event->accept();
-//	}
-//}
-//
-//
-//void BoardWidget::mouseMoveEvent(QMouseEvent* event)
-//{
-//	if (b_moved && event->buttons() == Qt::LeftButton && underMouse())
-//	{
-//		move(event->globalPos() - dragPosition);
-//		event->accept();
-//	}
-//}
-//
-//void BoardWidget::mouseDoubleClickEvent(QMouseEvent* event)
-//{
-//	// 处理双击事件
-//	if (event->button() == Qt::LeftButton) 
-//	{
-//		b_moved = 0;
-//		dragPosition = event->globalPos();
-//		event->accept(); 
-//
-//		setWindowMaxMin();
-//	}
-//}
-//
 
+
+void BoardWidget::mouseDoubleClickEvent(QMouseEvent* event)
+{
+	// 处理双击事件
+	if (event->button() == Qt::LeftButton) 
+	{
+		b_moved = 0;
+		dragPosition = event->globalPos();
+		event->accept(); 
+
+		setWindowMaxMin();
+	}
+}
 
 bool BoardWidget::event(QEvent* e)
 {
 	if (QEvent::HoverMove == e->type())//鼠标移动
 	{
 		QHoverEvent* event = static_cast<QHoverEvent*>(e);
+
+		
+
 		if (!resizing) 
 		{
 			// 如果不在缩放区域，显示相应的光标
@@ -319,6 +303,7 @@ bool BoardWidget::event(QEvent* e)
 				setCursor(Qt::ArrowCursor);  // 默认光标
 			}
 		}
+
 	}
 
 	return QWidget::event(e);
@@ -326,9 +311,12 @@ bool BoardWidget::event(QEvent* e)
 
 void BoardWidget::mousePressEvent(QMouseEvent* event)
 {
+
 	if (event->button() == Qt::LeftButton) 
 	{
-		lastPos = event->globalPos();
+		dragPosition = event->globalPos() - frameGeometry().topLeft();
+		beginrect = frameGeometry();
+		beginPos = event->globalPos();
 		resizing = false;
 
 		// 检测是否在窗口边缘区域进行缩放
@@ -378,46 +366,216 @@ void BoardWidget::mousePressEvent(QMouseEvent* event)
 	}
 }
 
+
+void BoardWidget::resizeEvent(QResizeEvent* event)
+{
+	auto xx = mapToGlobal(m_page->geometry().bottomRight()).x();
+	auto yy = mapToGlobal(m_page->geometry().bottomRight()).y();
+
+	//qDebug() << geometry().right();
+	//qDebug() << xx << yy;
+
+	qDebug() << "----resize----" << idx;
+	qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
+	qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
+
+	/*if (geometry().right() != xa)
+	{
+		move(abs(xa - geometry().width()), geometry().y());
+	}
+	qDebug() << "r:" << geometry().right() << "x+w" << geometry().x() + geometry().width() << "===" << xa;*/
+
+}
+
+void BoardWidget::moveEvent(QMoveEvent* event)
+{
+	qDebug() << "----move----" << idx;
+
+	// 调用父类的 moveEvent() 处理默认行为
+	QWidget::moveEvent(event);
+
+	// 在窗口位置变化时输出新的位置
+	qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
+	qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
+
+
+}
+
+void BoardWidget::paintEvent(QPaintEvent* event)
+{
+	//qDebug()<< "paint" << idx  << geometry() << "\n";
+
+	qDebug() << "----paint----" << idx;
+	qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
+	qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
+
+}
+
+
+void BoardWidget::movefun(int x, int y, int w, int h )
+{
+	HWND hwnd = (HWND)this->winId();
+	MoveWindow(hwnd, x, y, w , h, TRUE);
+}
+
+
+
+int qeqe = 1;
+
 void BoardWidget::mouseMoveEvent(QMouseEvent* event)
 {
 	if (resizing) {
-		QPoint delta = event->globalPos() - lastPos;
-		lastPos = event->globalPos();
+		
+		int w = beginrect.width();
+		int h = beginrect.height();
+		int x = beginrect.x();
+		int y = beginrect.y();
 
-		switch (resizeMode) 
+		QPoint delta = event->globalPos() - beginPos;
+		
+		if (w - delta.x() == geometry().width())
+			return;
+
+		switch (resizeMode)
 		{
 		case TopLeft:
-			resize(width() - delta.x(), height() - delta.y());
-			move(x() + delta.x(), y() + delta.y());
+			resize(w - delta.x(), h - delta.y());
+			//repaint();
+			//QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+			move(x + delta.x(), y + delta.y());
 			break;
 		case Top:
-			resize(width(), height() - delta.y());
-			move(x(), y() + delta.y());
+			resize(w, h - delta.y());
+			//repaint();
+			//QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+			move(x, y + delta.y());
 			break;
 		case TopRight:
-			resize(width() + delta.x(), height() - delta.y());
-			move(x(), y() + delta.y());
+			resize(w + delta.x(), h - delta.y());
+			move(x, y + delta.y());
 			break;
 		case Left:
-			resize(width() - delta.x(), height());
-			move(x() + delta.x(), y());
-			break;
-		case Right:
-			resize(width() + delta.x(), height());
-			break;
-		case BottomLeft:
-			resize(width() - delta.x(), height() + delta.y());
-			move(x() + delta.x(), y());
-			break;
-		case Bottom:
-			resize(width(), height() + delta.y());
-			break;
-		case BottomRight:
-			resize(width() + delta.x(), height() + delta.y());
+		{
+			/*idx++;
+			xa = x + w;*/
+
+			//auto curPos = event->globalPos().x();
+			//static auto lastPos = 0;
+
+			/*while(lastPos.x() != delta.x())
+			{
+				resize(w - lastPos.x(), h);
+				move(x + lastPos.x(), y);
+
+				if (lastPos.x() < delta.x())
+					lastPos += QPoint(1, 0);
+				else
+					lastPos += QPoint(-1, 0);
+			}*/
+			
+
+
+			// 放大效果很差
+			HWND hwnd = (HWND)this->winId();
+			MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 0);
+			lastPos = delta;
+
+			/*if (curPos < lastPos)
+			{
+				for (int i = lastPos; i > curPos; --i)
+				{
+					MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 0);
+				}
+			}
+			else
+			{
+				for (int i = lastPos; i < curPos; ++i)
+				{
+					MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 0);
+				}
+			}
+			lastPos = event->globalPos().x();*/
+
+
+			/*idx++;
+			resize(w - delta.x(), h);
+			repaint();
+			repaint();
+			QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+			move(x + delta.x(), y);
+			*/
+			//setGeometry(QRect(x + delta.x(), y, w - delta.x(), h));
+			//emit moveeee(x + delta.x(), y, w - delta.x(), h);
 			break;
 		}
+		case Right:
+			resize(w + delta.x(), h);
+			break;
+		case BottomLeft:
+			resize(w - delta.x(), h + delta.y());
+			move(x + delta.x(), y);
+			break;
+		case Bottom:
+			resize(w, h + delta.y());
+			break;
+		case BottomRight:
+			resize(w + delta.x(), h + delta.y());
+			break;
+		}
+		
+		repaint();
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+		/*auto xx = mapToGlobal(m_page->geometry().bottomRight()).x();
+		auto yy = mapToGlobal(m_page->geometry().bottomRight()).y();
+		qDebug() << xx << yy;
+		qDebug() << geometry().bottomRight();*/
+
+
+		//QPoint delta = event->globalPos() - lastPos;
+		//lastPos = event->globalPos();
+		//switch (resizeMode) 
+		//{
+		//case TopLeft:
+		//	resize(width() - delta.x(), height() - delta.y());
+		//	move(x() + delta.x(), y() + delta.y());
+		//	break;
+		//case Top:
+		//	resize(width(), height() - delta.y());
+		//	move(x(), y() + delta.y());
+		//	break;
+		//case TopRight:
+		//	resize(width() + delta.x(), height() - delta.y());
+		//	move(x(), y() + delta.y());
+		//	break;
+		//case Left:
+		//	resize(width() - delta.x(), height());
+		//	move(x() + delta.x(), y());
+		//	break;
+		//case Right:
+		//	resize(width() + delta.x(), height());
+		//	break;
+		//case BottomLeft:
+		//	resize(width() - delta.x(), height() + delta.y());
+		//	move(x() + delta.x(), y());
+		//	break;
+		//case Bottom:
+		//	resize(width(), height() + delta.y());
+		//	break;
+		//case BottomRight:
+		//	resize(width() + delta.x(), height() + delta.y());
+		//	break;
+		//}
+	}
+	else if(event->buttons() == Qt::LeftButton && underMouse())
+	{
+		move(event->globalPos() - dragPosition);
+		event->accept();
 	}
 }
+
+
+
 
 void BoardWidget::mouseReleaseEvent(QMouseEvent* event)
 {

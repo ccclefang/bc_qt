@@ -76,7 +76,16 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event);
-    //void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void moveEvent(QMoveEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
+
+    void movefun(int x, int y, int w, int h);
+
+signals:
+    void moveeee(int x, int y, int w, int h);
+
 
 
 private:
@@ -89,10 +98,13 @@ private:
     bool b_moved = 0;
     QPoint m_lastpos, m_dragStart, m_frameStart, dragPosition;
     QRect lastrect;
+    QRect beginrect;
 
+    int idx, xa, ya;
 
 
 private:
+    QPoint beginPos;  // 上次鼠标位置
     QPoint lastPos;  // 上次鼠标位置
     bool resizing;   // 是否正在缩放
     enum ResizeMode { None, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight } resizeMode;  // 缩放模式

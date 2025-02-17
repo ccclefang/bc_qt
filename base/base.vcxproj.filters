@@ -81,9 +81,6 @@
     <ClInclude Include="bc_base.h">
       <Filter>Header Files\base</Filter>
     </ClInclude>
-    <ClInclude Include="page_scaled.h">
-      <Filter>Header Files\page</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json">
@@ -105,6 +102,9 @@
     </QtMoc>
     <QtMoc Include="bc_global.h">
       <Filter>Header Files\base</Filter>
+    </QtMoc>
+    <QtMoc Include="page_scaled.h">
+      <Filter>Header Files\page</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

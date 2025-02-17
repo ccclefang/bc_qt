@@ -1,36 +1,54 @@
-﻿//#ifndef PAGE_SCALED_H
-//#define PAGE_SCALED_H
-//
-//#include "bc_widget.h"
-//
-//
-//class BcScaledWidget : public QWidget
-//{
-//    Q_OBJECT
-//public:
-//    explicit BcScaledWidget(QWidget* parent = nullptr);
-//
-//protected:
-//    void initLayout();
-//    void connectSignals();
-//    void updateWidget();
-//
-//    void setWindowMaxMin();
-//
-//    void mousePressEvent(QMouseEvent* event) override;
-//    void mouseMoveEvent(QMouseEvent* event) override;
-//    void mouseDoubleClickEvent(QMouseEvent* event) override;
-//
-//private:
-//    bool b_maxed = 0;
-//    bool b_moved = 0;
-//    QPoint m_lastpos, m_dragStart, m_frameStart, dragPosition;
-//    QRect lastrect;
-//
-//};
-//
-//
-//
+﻿#ifndef PAGE_SCALED_H
+#define PAGE_SCALED_H
+
+#include "bc_widget.h"
+
+
+class BcScaledWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit BcScaledWidget(QWidget* parent = nullptr);
+
+protected:
+    void setWindowMaxMin();
+
+    bool event(QEvent* e);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+
+
+
+private:
+
+    bool b_maxed = 0;
+    bool b_moved = 0;
+    QPoint m_lastpos, m_dragStart, m_frameStart, dragPosition;
+    QRect lastrect;
+    QRect beginrect;
+
+    int idx, xa, ya;
+
+
+    QPoint beginPos;
+    QPoint lastPos;
+    QPoint curPos;
+
+    bool resizing;   // 是否正在缩放
+    enum ResizeMode { None, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight } resizeMode;  // 缩放模式
+    const int resizeMargin = 10;  // 定义缩放区域的大小
+
+
+
+};
+
+
+
+
+
+
 //class QFramelessHelper : public QObject
 //{
 //    Q_OBJECT
@@ -110,5 +128,5 @@
 //signals:
 //    void maximizedChanged(bool max);
 //};
-//
-//#endif // PAGE_SCALED_H
+
+#endif // PAGE_SCALED_H

@@ -182,7 +182,6 @@ void BoardWidget::initLayout()
 	m_layout->addWidget(m_title);
 	m_layout->addStretch(1);
 
-
 	setAttribute(Qt::WA_Hover, true);
 	setMouseTracking(true);  // 启用鼠标跟踪
 }
@@ -211,7 +210,6 @@ void BoardWidget::updateWidget()
 {
 	
 }
-
 
 
 
@@ -317,6 +315,7 @@ void BoardWidget::mousePressEvent(QMouseEvent* event)
 		dragPosition = event->globalPos() - frameGeometry().topLeft();
 		beginrect = frameGeometry();
 		beginPos = event->globalPos();
+		lastPos = event->globalPos();
 		resizing = false;
 
 		// 检测是否在窗口边缘区域进行缩放
@@ -369,15 +368,10 @@ void BoardWidget::mousePressEvent(QMouseEvent* event)
 
 void BoardWidget::resizeEvent(QResizeEvent* event)
 {
-	auto xx = mapToGlobal(m_page->geometry().bottomRight()).x();
-	auto yy = mapToGlobal(m_page->geometry().bottomRight()).y();
-
-	//qDebug() << geometry().right();
-	//qDebug() << xx << yy;
-
-	qDebug() << "----resize----" << idx;
-	qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
-	qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
+	
+	//qDebug() << "----resize----" << idx;
+	//qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
+	//qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
 
 	/*if (geometry().right() != xa)
 	{
@@ -389,26 +383,26 @@ void BoardWidget::resizeEvent(QResizeEvent* event)
 
 void BoardWidget::moveEvent(QMoveEvent* event)
 {
-	qDebug() << "----move----" << idx;
+//	qDebug() << "----move----" << idx;
 
+	//// 在窗口位置变化时输出新的位置
+	//qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
+	//qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
+	
 	// 调用父类的 moveEvent() 处理默认行为
 	QWidget::moveEvent(event);
-
-	// 在窗口位置变化时输出新的位置
-	qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
-	qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
-
-
 }
 
 void BoardWidget::paintEvent(QPaintEvent* event)
 {
 	//qDebug()<< "paint" << idx  << geometry() << "\n";
 
-	qDebug() << "----paint----" << idx;
-	qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
-	qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
+	//qDebug() << "----paint----" << idx;
+	//qDebug() << "w:" << geometry().width() << "x:" << geometry().x();
+	//qDebug() << "r:" << geometry().right() << "x + w" << geometry().x() + geometry().width() << "===" << xa << "\n\n";
 
+
+	QWidget::paintEvent(event);
 }
 
 
@@ -432,7 +426,9 @@ void BoardWidget::mouseMoveEvent(QMouseEvent* event)
 		int y = beginrect.y();
 
 		QPoint delta = event->globalPos() - beginPos;
-		
+		curPos = event->globalPos();
+
+
 		if (w - delta.x() == geometry().width())
 			return;
 
@@ -456,56 +452,29 @@ void BoardWidget::mouseMoveEvent(QMouseEvent* event)
 			break;
 		case Left:
 		{
-			/*idx++;
-			xa = x + w;*/
-
-			//auto curPos = event->globalPos().x();
-			//static auto lastPos = 0;
-
-			/*while(lastPos.x() != delta.x())
+			if (w - delta.x() < sizeHint().width())
 			{
-				resize(w - lastPos.x(), h);
-				move(x + lastPos.x(), y);
-
-				if (lastPos.x() < delta.x())
-					lastPos += QPoint(1, 0);
-				else
-					lastPos += QPoint(-1, 0);
-			}*/
-			
-
-
-			// 放大效果很差
-			HWND hwnd = (HWND)this->winId();
-			MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 0);
-			lastPos = delta;
-
-			/*if (curPos < lastPos)
-			{
-				for (int i = lastPos; i > curPos; --i)
-				{
-					MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 0);
-				}
+				return;
 			}
-			else
+			auto changed = curPos - lastPos;
+			static int sum = 0;
+			sum += changed.x();
+			if (abs(sum) > 10 )
 			{
-				for (int i = lastPos; i < curPos; ++i)
+				if (changed.x() > 0)
 				{
-					MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 0);
+					HWND hwnd = (HWND)this->winId();
+					MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 1);
 				}
+				else {
+					resize(w - delta.x(), h);
+					repaint();
+					QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+					move(x + delta.x(), y);
+				}
+				sum = 0;
 			}
-			lastPos = event->globalPos().x();*/
-
-
-			/*idx++;
-			resize(w - delta.x(), h);
-			repaint();
-			repaint();
-			QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-			move(x + delta.x(), y);
-			*/
-			//setGeometry(QRect(x + delta.x(), y, w - delta.x(), h));
-			//emit moveeee(x + delta.x(), y, w - delta.x(), h);
+			lastPos = curPos;
 			break;
 		}
 		case Right:
@@ -526,52 +495,17 @@ void BoardWidget::mouseMoveEvent(QMouseEvent* event)
 		repaint();
 		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-		/*auto xx = mapToGlobal(m_page->geometry().bottomRight()).x();
-		auto yy = mapToGlobal(m_page->geometry().bottomRight()).y();
-		qDebug() << xx << yy;
-		qDebug() << geometry().bottomRight();*/
-
-
-		//QPoint delta = event->globalPos() - lastPos;
-		//lastPos = event->globalPos();
-		//switch (resizeMode) 
-		//{
-		//case TopLeft:
-		//	resize(width() - delta.x(), height() - delta.y());
-		//	move(x() + delta.x(), y() + delta.y());
-		//	break;
-		//case Top:
-		//	resize(width(), height() - delta.y());
-		//	move(x(), y() + delta.y());
-		//	break;
-		//case TopRight:
-		//	resize(width() + delta.x(), height() - delta.y());
-		//	move(x(), y() + delta.y());
-		//	break;
-		//case Left:
-		//	resize(width() - delta.x(), height());
-		//	move(x() + delta.x(), y());
-		//	break;
-		//case Right:
-		//	resize(width() + delta.x(), height());
-		//	break;
-		//case BottomLeft:
-		//	resize(width() - delta.x(), height() + delta.y());
-		//	move(x() + delta.x(), y());
-		//	break;
-		//case Bottom:
-		//	resize(width(), height() + delta.y());
-		//	break;
-		//case BottomRight:
-		//	resize(width() + delta.x(), height() + delta.y());
-		//	break;
-		//}
+		
 	}
 	else if(event->buttons() == Qt::LeftButton && underMouse())
 	{
 		move(event->globalPos() - dragPosition);
 		event->accept();
 	}
+
+
+
+
 }
 
 

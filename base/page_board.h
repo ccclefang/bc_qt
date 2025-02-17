@@ -104,8 +104,10 @@ private:
 
 
 private:
-    QPoint beginPos;  // 上次鼠标位置
-    QPoint lastPos;  // 上次鼠标位置
+    QPoint beginPos;
+    QPoint lastPos;
+    QPoint curPos;
+
     bool resizing;   // 是否正在缩放
     enum ResizeMode { None, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight } resizeMode;  // 缩放模式
     const int resizeMargin = 10;  // 定义缩放区域的大小

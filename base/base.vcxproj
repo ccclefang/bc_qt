@@ -120,7 +120,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="page_scaled.h" />
+    <QtMoc Include="page_scaled.h" />
     <QtMoc Include="page_board.h" />
     <ClInclude Include="page_main.h" />
     <QtMoc Include="page_set.h" />

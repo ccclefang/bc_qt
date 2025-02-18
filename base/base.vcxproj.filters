@@ -67,8 +67,8 @@
     <ClCompile Include="page_board.cpp">
       <Filter>Source Files\page</Filter>
     </ClCompile>
-    <ClCompile Include="page_scaled.cpp">
-      <Filter>Source Files\page</Filter>
+    <ClCompile Include="bc_scaledwidget.cpp">
+      <Filter>Source Files\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,8 +103,8 @@
     <QtMoc Include="bc_global.h">
       <Filter>Header Files\base</Filter>
     </QtMoc>
-    <QtMoc Include="page_scaled.h">
-      <Filter>Header Files\page</Filter>
+    <QtMoc Include="bc_scaledwidget.h">
+      <Filter>Header Files\base</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

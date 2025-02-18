@@ -30,7 +30,6 @@ BcVLayout::BcVLayout(QWidget* parent, int margin, int space)
 
 
 // ********************  按钮  ***********************
-
 BcButton::BcButton(QString text, QWidget* parent)
     : QPushButton(text, parent), m_shadow(nullptr)
 {
@@ -117,7 +116,6 @@ BcButton::BcButton(QString text, QWidget* parent)
 
 
 
-//
 //void BcButton::changeEvent(QEvent* event)
 //{
 //    switch (event->type()) {
@@ -129,3 +127,4 @@ BcButton::BcButton(QString text, QWidget* parent)
 //    }
 //    QPushButton::changeEvent(event);
 //}
+

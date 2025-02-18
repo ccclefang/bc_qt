@@ -113,14 +113,14 @@
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
     <ClCompile Include="page_main.cpp" />
-    <ClCompile Include="page_scaled.cpp" />
+    <ClCompile Include="bc_scaledwidget.cpp" />
     <ClCompile Include="page_set.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="bc_global.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="page_scaled.h" />
+    <QtMoc Include="bc_scaledwidget.h" />
     <QtMoc Include="page_board.h" />
     <ClInclude Include="page_main.h" />
     <QtMoc Include="page_set.h" />

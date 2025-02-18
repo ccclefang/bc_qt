@@ -1,55 +1,175 @@
-﻿#include "page_scaled.h"
+﻿#include "bc_scaledwidget.h"
 
 
 // ****************    页面     *****************
-BcScaledWidget::BcScaledWidget(QWidget* parent)
-    :QWidget(parent)
+BcScaledWidget::BcScaledWidget(QWidget* parent, int resizeMargin, int resizeWidth)
+    :QWidget(parent), resizeMargin(resizeMargin), resizeWidth(resizeWidth)
 {
     resize(600, 400);
-
 }
-
-
-
 
 void BcScaledWidget::setWindowMaxMin()
 {
-	if (b_maxed)
-	{
-		b_maxed = 0;
+	//if (b_maxed)
+	//{
+	//	b_maxed = 0;
+	//	// 取消最大化
+	//	setGeometry(lastrect);
+	//	showNormal();
+	//}
+	//else
+	//{
+	//	b_maxed = 1;
 
-		// 取消最大化
-		setGeometry(lastrect);
-		showNormal();
+	//	// 最大化
+	//	m_lastpos = pos();
+	//	lastrect = geometry();
+
+	//	move(0, 0);
+	//	resize(700, 500);
+	//	showMaximized();
+	//}
+}
+
+
+bool BcScaledWidget::setMouse(QPoint pos)
+{
+	if (isMaximized())
+		return false;
+
+	// 如果不在缩放区域，显示相应的光标
+	int innerXLeft = resizeMargin + resizeWidth;  // 内边界的左侧
+	int innerXRight = width() - resizeMargin - resizeWidth;  // 内边界的右侧
+	int innerYTop = resizeMargin + resizeWidth;  // 内边界的顶部
+	int innerYBottom = height() - resizeMargin - resizeWidth;  // 内边界的底部
+
+	int outerXLeft = resizeMargin;  // 外边界的左侧
+	int outerXRight = width() - resizeMargin;  // 外边界的右侧
+	int outerYTop = resizeMargin;  // 外边界的顶部
+	int outerYBottom = height() - resizeMargin;  // 外边界的底部
+
+	// 判断鼠标是否在环形区域内
+	bool inOuterX = (pos.x() >= outerXLeft && pos.x() <= outerXRight);
+	bool inOuterY = (pos.y() >= outerYTop && pos.y() <= outerYBottom);
+	bool inInnerX = (pos.x() >= innerXLeft && pos.x() <= innerXRight);
+	bool inInnerY = (pos.y() >= innerYTop && pos.y() < innerYBottom);
+
+	if (inOuterX && inOuterY && !(inInnerX && inInnerY))  
+	{
+		// 计算鼠标到外边界的距离
+		int distLeft = pos.x() - outerXLeft;
+		int distRight = outerXRight - pos.x();
+		int distTop = pos.y() - outerYTop;
+		int distBottom = outerYBottom - pos.y();
+
+		// 根据鼠标位置调整光标
+		if (distLeft <= resizeWidth)
+		{
+			if (distTop <= resizeWidth)
+			{
+				resizeMode = TopLeft;
+				setCursor(Qt::SizeFDiagCursor);  // 左上角对角线
+			}
+			else if (distBottom <= resizeWidth)
+			{
+				resizeMode = BottomLeft;
+				setCursor(Qt::SizeBDiagCursor);  // 左下角对角线
+			}
+			else
+			{
+				resizeMode = Left;
+				setCursor(Qt::SizeHorCursor);  // 左侧水平
+			}
+		}
+		else if (distRight <= resizeWidth)
+		{
+			if (distTop <= resizeWidth)
+			{
+				resizeMode = TopRight;
+				setCursor(Qt::SizeBDiagCursor);  // 右上角对角线
+			}
+			else if (distBottom <= resizeWidth)
+			{
+				resizeMode = BottomRight;
+				setCursor(Qt::SizeFDiagCursor);  // 右下角对角线
+			}
+			else
+			{
+				resizeMode = Right;
+				setCursor(Qt::SizeHorCursor);  // 右侧水平
+			}
+		}
+		else if (distTop <= resizeWidth)
+		{
+			resizeMode = Top;
+			setCursor(Qt::SizeVerCursor);  // 上部垂直
+		}
+		else if (distBottom <= resizeWidth)
+		{
+			resizeMode = Bottom;
+			setCursor(Qt::SizeVerCursor);  // 下部垂直
+		}
+		else
+		{
+			// 补漏（理论上不执行）
+			resizeMode = None;
+			setCursor(Qt::ArrowCursor);
+			return false; 
+		}
 	}
 	else
 	{
-		b_maxed = 1;
-
-		// 最大化
-		m_lastpos = pos();
-		lastrect = geometry();
-
-		move(0, 0);
-		resize(700, 500);
-		showMaximized();
+		// 环形区域外(内外都包括)
+		resizeMode = None;
+		setCursor(Qt::ArrowCursor); 
+		return false; // 不缩放
 	}
+	
+	return true;
 }
 
 
-
-void BcScaledWidget::mouseDoubleClickEvent(QMouseEvent* event)
+void BcScaledWidget::setMoveScaled(int nx, int ny, int nw, int nh)
 {
-	// 处理双击事件
-	if (event->button() == Qt::LeftButton)
-	{
-		b_moved = 0;
-		dragPosition = event->globalPos();
-		event->accept();
+	int x = beginrect.x() + nx;
+	int y = beginrect.y() + ny;
+	int w = beginrect.width() + nw;
+	int h = beginrect.height() + nh;
 
-		setWindowMaxMin();
+	if (w < sizeHint().width() || h < sizeHint().height())
+	{
+		return;
 	}
+
+	resize(w, h);
+	move(x, y);
+
+	// 减轻左侧闪烁
+	//if (resizeMode == Left)
+	//{
+	//	auto changed = curPos - lastPos;
+	//	static int sum = 0;
+	//	sum += changed.x();
+	//	if (abs(sum) > 10)
+	//	{
+	//		if (changed.x() > 0)
+	//		{
+	//			HWND hwnd = (HWND)this->winId();
+	//			MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 1);
+	//		}
+	//		else {
+	//			resize(w - delta.x(), h);
+	//	      // 刷新导致阴影卡顿
+	//			repaint();
+	//			QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+	//			move(x + delta.x(), y);
+	//		}
+	//		sum = 0;
+	//	}
+	//	lastPos = curPos;
+	//}
 }
+
 
 bool BcScaledWidget::event(QEvent* e)
 {
@@ -57,104 +177,28 @@ bool BcScaledWidget::event(QEvent* e)
 	{
 		QHoverEvent* event = static_cast<QHoverEvent*>(e);
 
-
-
 		if (!resizing)
 		{
-			// 如果不在缩放区域，显示相应的光标
-			if (event->pos().x() < resizeMargin) {
-				if (event->pos().y() < resizeMargin) {
-					setCursor(Qt::SizeFDiagCursor);  // 左上角对角线
-				}
-				else if (event->pos().y() > height() - resizeMargin) {
-					setCursor(Qt::SizeBDiagCursor);  // 左下角对角线
-				}
-				else {
-					setCursor(Qt::SizeHorCursor);  // 左侧水平
-				}
-			}
-			else if (event->pos().x() > width() - resizeMargin) {
-				if (event->pos().y() < resizeMargin) {
-					setCursor(Qt::SizeBDiagCursor);  // 右上角对角线
-				}
-				else if (event->pos().y() > height() - resizeMargin) {
-					setCursor(Qt::SizeFDiagCursor);  // 右下角对角线
-				}
-				else {
-					setCursor(Qt::SizeHorCursor);  // 右侧水平
-				}
-			}
-			else if (event->pos().y() < resizeMargin) {
-				setCursor(Qt::SizeVerCursor);  // 上部垂直
-			}
-			else if (event->pos().y() > height() - resizeMargin) {
-				setCursor(Qt::SizeVerCursor);  // 下部垂直
-			}
-			else {
-				setCursor(Qt::ArrowCursor);  // 默认光标
-			}
+			// 设置光标
+			BcScaledWidget::setMouse(event->pos());
 		}
-
 	}
 
 	return QWidget::event(e);
 }
 
+
 void BcScaledWidget::mousePressEvent(QMouseEvent* event)
 {
-
+	// 拖拽和移动判定
 	if (event->button() == Qt::LeftButton)
 	{
-		dragPosition = event->globalPos() - frameGeometry().topLeft();
+		// 初始位置
 		beginrect = frameGeometry();
 		beginPos = event->globalPos();
-		lastPos = event->globalPos();
-		resizing = false;
 
-		// 检测是否在窗口边缘区域进行缩放
-		if (event->pos().x() < resizeMargin)
-		{
-			if (event->pos().y() < resizeMargin) {
-				resizeMode = TopLeft;
-				setCursor(Qt::SizeFDiagCursor);  // 左上角对角线
-			}
-			else if (event->pos().y() > height() - resizeMargin) {
-				resizeMode = BottomLeft;
-				setCursor(Qt::SizeBDiagCursor);  // 左下角对角线
-			}
-			else {
-				resizeMode = Left;
-				setCursor(Qt::SizeHorCursor);  // 左侧水平
-			}
-		}
-		else if (event->pos().x() > width() - resizeMargin) {
-			if (event->pos().y() < resizeMargin) {
-				resizeMode = TopRight;
-				setCursor(Qt::SizeBDiagCursor);  // 右上角对角线
-			}
-			else if (event->pos().y() > height() - resizeMargin) {
-				resizeMode = BottomRight;
-				setCursor(Qt::SizeFDiagCursor);  // 右下角对角线
-			}
-			else {
-				resizeMode = Right;
-				setCursor(Qt::SizeHorCursor);  // 右侧水平
-			}
-		}
-		else if (event->pos().y() < resizeMargin) {
-			setCursor(Qt::SizeVerCursor);  // 上部垂直
-			resizeMode = Top;
-		}
-		else if (event->pos().y() > height() - resizeMargin) {
-			setCursor(Qt::SizeVerCursor);  // 下部垂直
-			resizeMode = Bottom;
-		}
-		else {
-			resizing = false;
-			return;
-		}
-
-		resizing = true;  // 开始缩放
+		// 是否开始缩放
+		resizing = BcScaledWidget::setMouse(event->pos());
 	}
 }
 
@@ -162,77 +206,44 @@ void BcScaledWidget::mousePressEvent(QMouseEvent* event)
 
 void BcScaledWidget::mouseMoveEvent(QMouseEvent* event)
 {
-	if (resizing) {
-
-		int w = beginrect.width();
-		int h = beginrect.height();
-		int x = beginrect.x();
-		int y = beginrect.y();
-
+	if (resizing) 
+	{
 		QPoint delta = event->globalPos() - beginPos;
-		curPos = event->globalPos();
+		int nx = delta.x();
+		int ny = delta.y();
 
+		qDebug() << "mouseMoveEvent:  " << event->globalPos();
+		qDebug() << "mouseMoveEvent:  " << event->screenPos();
+		qDebug() << "windowPos:  " << event->windowPos();
 
-		if (w - delta.x() == geometry().width())
+		if (width() - delta.x() == geometry().width())
 			return;
 
 		switch (resizeMode)
 		{
-		case TopLeft:
-			resize(w - delta.x(), h - delta.y());
-			//repaint();
-			//QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-			move(x + delta.x(), y + delta.y());
-			break;
 		case Top:
-			resize(w, h - delta.y());
-			//repaint();
-			//QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-			move(x, y + delta.y());
+			setMoveScaled(0, ny, 0, -ny);
 			break;
-		case TopRight:
-			resize(w + delta.x(), h - delta.y());
-			move(x, y + delta.y());
+		case TopLeft:
+			setMoveScaled(nx, ny, -nx, -ny);
 			break;
 		case Left:
-		{
-			if (w - delta.x() < sizeHint().width())
-			{
-				return;
-			}
-			auto changed = curPos - lastPos;
-			static int sum = 0;
-			sum += changed.x();
-			if (abs(sum) > 10)
-			{
-				if (changed.x() > 0)
-				{
-					HWND hwnd = (HWND)this->winId();
-					MoveWindow(hwnd, x + delta.x(), y, w - delta.x(), h, 1);
-				}
-				else {
-					resize(w - delta.x(), h);
-					repaint();
-					QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-					move(x + delta.x(), y);
-				}
-				sum = 0;
-			}
-			lastPos = curPos;
-			break;
-		}
-		case Right:
-			resize(w + delta.x(), h);
+			setMoveScaled(nx, 0, -nx, 0);
 			break;
 		case BottomLeft:
-			resize(w - delta.x(), h + delta.y());
-			move(x + delta.x(), y);
+			setMoveScaled(nx, 0, -nx, ny);
 			break;
 		case Bottom:
-			resize(w, h + delta.y());
+			setMoveScaled(0, 0, 0, ny);
 			break;
 		case BottomRight:
-			resize(w + delta.x(), h + delta.y());
+			setMoveScaled(0, 0, nx, ny);
+			break;
+		case Right:
+			setMoveScaled(0, 0, nx, 0);
+			break;
+		case TopRight:
+			setMoveScaled(0, ny, nx, -ny);
 			break;
 		}
 
@@ -241,12 +252,10 @@ void BcScaledWidget::mouseMoveEvent(QMouseEvent* event)
 	}
 	else if (event->buttons() == Qt::LeftButton && underMouse())
 	{
-		move(event->globalPos() - dragPosition);
+		move(event->globalPos() - beginPos + beginrect.topLeft());
 		event->accept();
 	}
-
 }
-
 
 
 void BcScaledWidget::mouseReleaseEvent(QMouseEvent* event)
@@ -257,6 +266,18 @@ void BcScaledWidget::mouseReleaseEvent(QMouseEvent* event)
 	}
 }
 
+
+
+void BcScaledWidget::mouseDoubleClickEvent(QMouseEvent* event)
+{
+	// 处理双击事件
+	if (event->button() == Qt::LeftButton)
+	{
+		setWindowMaxMin();
+
+		event->accept();
+	}
+}
 
 
 

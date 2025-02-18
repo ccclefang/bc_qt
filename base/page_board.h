@@ -2,6 +2,9 @@
 
 
 #include "bc_widget.h"
+#include "bc_scaledwidget.h"
+
+
 
 
 // ****************    标题     *****************
@@ -12,11 +15,13 @@ class CustomTitleBar : public QWidget
 public:
     explicit CustomTitleBar(QWidget* parent = nullptr);
 
-    void changeMaxIcon(bool isMax);
+    void setMax();
+    void setNoraml();
 
 signals:
     void showMin();
     void showMax();
+    void showNoraml();
     void showClose();
 
 protected:
@@ -27,6 +32,7 @@ protected:
 private:
     QPushButton* minButton;
     QPushButton* maxButton;
+    QPushButton* normalButton;
     QPushButton* closeButton;
 };
 
@@ -58,7 +64,7 @@ private:
 
 
 // ****************    页面     *****************
-class BoardWidget : public QWidget
+class BoardWidget : public BcScaledWidget
 {
     Q_OBJECT
 
@@ -70,22 +76,13 @@ protected:
     void connectSignals();
     void updateWidget();
 
-    void setWindowMaxMin();
+    void mousePressEvent(QMouseEvent* event);
 
-    bool event(QEvent* e);
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event);
-    void mouseDoubleClickEvent(QMouseEvent* event) override;
-    void resizeEvent(QResizeEvent* event) override;
-    void moveEvent(QMoveEvent* event) override;
-    void paintEvent(QPaintEvent* event) override;
+    // bool nativeEvent(const QByteArray& eventType, void* message, long* result) override;
 
-    void movefun(int x, int y, int w, int h);
-
-signals:
-    void moveeee(int x, int y, int w, int h);
-
+private:
+    void setWindowMax();
+    void setWindowNormal();
 
 
 private:
@@ -93,31 +90,6 @@ private:
 
     BackgroundWidget* m_page;
     CustomTitleBar*   m_title;
-
-    bool b_maxed = 0;
-    bool b_moved = 0;
-    QPoint m_lastpos, m_dragStart, m_frameStart, dragPosition;
-    QRect lastrect;
-    QRect beginrect;
-
-    int idx, xa, ya;
-
-
-private:
-    QPoint beginPos;
-    QPoint lastPos;
-    QPoint curPos;
-
-    bool resizing;   // 是否正在缩放
-    enum ResizeMode { None, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight } resizeMode;  // 缩放模式
-    const int resizeMargin = 10;  // 定义缩放区域的大小
 };
-
-
-
-
-
-
-
 
 
